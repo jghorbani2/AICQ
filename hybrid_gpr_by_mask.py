@@ -1,9 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.metrics import r2_score
-import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
 from helper_hybrid import (
     golden_section_search,
     void_ratio_to_density,
@@ -233,53 +230,7 @@ def run_option(option_name: str, csv_path: str, json_path: str, cfg, gpr_model):
         f.write(f'Final R² on holdout with optimized alpha: {r2:.4f}\n')
         f.write(f'Final RMSE on holdout with optimized alpha: {rmse:.4f}\n')
 
-    # Plot lane map-style grid using rel_X/rel_Y
-    plt.rcParams.update({'font.family': cfg['plotting']['font_family'], 'font.size': int(cfg['plotting']['font_size'])})
-    unique_x = np.unique(x_coord)
-    unique_y = np.unique(y_coord)
-    unique_x.sort()
-    unique_y.sort()
-    x_index_map = {v: i for i, v in enumerate(unique_x)}
-    y_index_map = {v: i for i, v in enumerate(unique_y)}
-
-    numeric_grid = np.zeros((len(unique_y), len(unique_x)))
-    # mark training as grey (0)
-    for i in np.where(used_mask)[0]:
-        xi = x_index_map[x_coord[i]]
-        yi = y_index_map[y_coord[i]]
-        numeric_grid[yi, xi] = 0
-    # mark holdout by threshold using predictions
-    hold_indices = np.where(hold_mask)[0]
-    for j, i in enumerate(hold_indices):
-        xi = x_index_map[x_coord[i]]
-        yi = y_index_map[y_coord[i]]
-        numeric_grid[yi, xi] = 1 if pred_density[j] > threshold else -1
-
-    fig, ax = plt.subplots(figsize=(float(cfg['plotting']['fig_width']), float(cfg['plotting']['fig_height'])))
-    cmap = mcolors.ListedColormap(['red', 'grey', 'green'])
-    bounds = [-1.5, -0.5, 0.5, 1.5]
-    norm = mcolors.BoundaryNorm(bounds, cmap.N)
-    c = ax.pcolormesh(numeric_grid, cmap=cmap, norm=norm, edgecolors='black', linewidth=2)
-    ax.set_xticks(np.arange(0.5, len(unique_x), 1))
-    ax.set_yticks(np.arange(0.5, len(unique_y), 1))
-    ax.set_xticklabels([f'{x:.2f}' for x in unique_x])
-    ax.set_yticklabels([f'{y:.2f}' for y in unique_y])
-    ax.set_xlabel('rel_X (m)')
-    ax.set_ylabel('rel_Y (m)')
-    cbar = fig.colorbar(c, ticks=[-1, 0, 1])
-    cbar.ax.set_yticklabels(['Below Threshold', 'Used for Training', 'At or Above Threshold'])
-    ax.invert_yaxis()
-
-    # Add A/U labels for holdout cells based on actual NDG density
-    for j, i in enumerate(hold_indices):
-        xi = x_index_map[x_coord[i]]
-        yi = y_index_map[y_coord[i]]
-        label = 'A' if actual_density[j] >= threshold else 'U'
-        ax.text(xi + 0.5, yi + 0.5, label, ha='center', va='center', color='black')
-
-    plt.tight_layout()
-    plt.savefig(f'Hybrid_Lane_map_best_kernel_{option_name}.tiff', dpi=300, format='tiff')
-    plt.close()
+    # Plotting disabled to keep the Lambda deployment lightweight.
 
 
 def main():
@@ -306,5 +257,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 

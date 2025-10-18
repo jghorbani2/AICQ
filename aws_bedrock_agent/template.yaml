@@ -30,7 +30,6 @@ Resources:
             Resource: '*'
       Environment:
         Variables:
-          AWS_REGION: !Ref AWS::Region
           BEDROCK_STRICT: "1"
       Events:
         ApiProxy:
