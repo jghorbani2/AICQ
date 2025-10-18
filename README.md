@@ -71,6 +71,16 @@ POST /process_csv_text
 4. In Lambda env vars, set as needed:
    - `AWS_REGION`, `BEDROCK_STRICT=1`, `S3_BUCKET` (optional), and if you mount/host inputs elsewhere, adjust paths accordingly.
 
+### Minimal Lambda bundle (CloudShell friendly)
+- Purpose: expose only `/classify` and `/classify_many` without heavyweight scientific dependencies, keeping the unzipped size well below the 250 MB CloudShell limit.
+- Build:
+  1. `./deployment/lambda_minimal/build.sh` (runs from repo root; outputs `dist/lambda-minimal.zip`).
+  2. Upload the ZIP to Lambda (or through CloudShell → S3) and set the handler to `lambda_handler.handler`.
+- Included files: `lambda_handler.py` and the lightweight `aws_bedrock_agent/bedrock_client.py` + config.
+- Not included: the physics/GPR pipeline, pandas/numpy/scikit-learn, and the local `.joblib` model. The handler returns `501` if you call `/process_dataset` or `/process_csv_text`.
+- Dependencies: none—AWS Lambda’s built-in `boto3`/`botocore` is sufficient.
+- To re-enable the full pipeline, deploy with SAM and install from `requirements.txt` (or add a SageMaker endpoint for the surrogate model).
+
 ### AgentCore (optional, recommended)
 - Provision an Agent and Lambda action group:
 ```
