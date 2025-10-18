@@ -1,0 +1,66 @@
+{
+  "soil": {
+    "Gs": 2.7
+  },
+  "physics": {
+    "initial_void_ratio_guess": 0.35
+  },
+  "swcc": {
+    "n": 0.28,
+    "m": 0.98,
+    "a": 0.0102,
+    "omega": 10.6
+  },
+  "data": {
+    "csv_option1": "data/Book2_option1_llm.csv",
+    "csv_option2": "data/Book2_option2_llm.csv",
+    "json_option1": "data/Book2_option1_llm.json",
+    "json_option2": "data/Book2_option2_llm.json"
+  },
+  "model": {
+    "path": "gpr_model_constrained3.joblib"
+  },
+  "omc": {
+    "offset": 0.5
+  },
+  "moisture": {
+    "default_label": "medium"
+  },
+  "threshold": 2.110835,
+  "seed": 44,
+  "pso": {
+    "swarmsize": 100,
+    "omega": 0.5,
+    "phip": 0.5,
+    "phig": 0.5,
+    "maxiter": 100,
+    "debug": false,
+    "lb_void_ratio": 0.25,
+    "ub_void_ratio": 0.5
+  },
+  "gpr": {
+    "n_restarts_optimizer": 10,
+    "alpha": 0.01
+  },
+  "cv": {
+    "splits": 3
+  },
+  "alpha": {
+    "initial": 0.5,
+    "min": 0.0,
+    "max": 1.0
+  },
+  "golden_section": {
+    "tol": 0.01
+  },
+  "plotting": {
+    "font_family": "Times New Roman",
+    "font_size": 18,
+    "fig_width": 9,
+    "fig_height": 4.5
+  },
+  "logging": {
+    "file": "run.log",
+    "append": true
+  }
+}
