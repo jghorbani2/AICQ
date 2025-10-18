@@ -3,4 +3,4 @@ pandas==2.2.3
 scipy==1.11.4
 scikit-learn==1.4.2
 bottleneck==1.6.0
-numexpr==2.14.1
+numexpr==2.8.7
