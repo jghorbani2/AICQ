@@ -18,12 +18,7 @@ class BedrockMoistureClassifier:
         cfg_path = os.path.join(os.path.dirname(__file__), "config_aws.json")
         with open(cfg_path, "r") as f:
             cfg = json.load(f)
-        self.region = (
-            region
-            or os.getenv("BEDROCK_REGION")
-            or os.getenv("AWS_REGION")
-            or cfg.get("aws_region", "us-east-1")
-        )
+        self.region = region or os.getenv("AWS_REGION") or cfg.get("aws_region", "us-east-1")
         model_cfg = cfg.get("bedrock", {})
         self.model_id = model_id or model_cfg.get("model_id")
         self.temperature = temperature if temperature is not None else float(model_cfg.get("temperature", 0.0))
