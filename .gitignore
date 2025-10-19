@@ -34,6 +34,7 @@ Hybrid_Lane_map_*_kernel_*.tiff
 
 # Build / deployment
 .aws-sam/
+dist/
 
 # Media / plots (regenerated)
 *.tiff
